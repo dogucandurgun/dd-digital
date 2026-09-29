@@ -50,7 +50,6 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .rotator{display:inline-grid;font-size:min(1em,8.6vw);line-height:1.2;position:relative;padding-bottom:.12em}
 .rotator .w{grid-area:1/1;white-space:nowrap;visibility:hidden}
 .rotator .w.on{visibility:visible}
-.rotator .ch{display:inline-block;overflow:hidden;vertical-align:top;padding:.16em .02em .1em;margin:-.16em -.02em -.1em}
 .rotator .ci{display:inline-block;will-change:transform,filter,opacity;background:linear-gradient(180deg,#e4ff9a,var(--accent) 55%,#8fd61f);-webkit-background-clip:text;background-clip:text;color:transparent}
 .rotator .prog{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(198,255,61,.15);border-radius:3px;overflow:hidden}
 .rotator .prog i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
@@ -504,28 +503,30 @@ footer{border-top:1px solid var(--line);padding:70px 0 40px}
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
 
-// Hero word rotator: per-letter masked reveal with blur
+// Hero word rotator: old word exits letter by letter, then the new one blurs in
 (()=>{
-  const root=document.getElementById('rot'),HOLD=2800;
+  const root=document.getElementById('rot'),HOLD=3200;
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const words=root.dataset.words.split('|').map(t=>{
     const w=document.createElement('span');w.className='w';w.setAttribute('aria-hidden','true');
-    w.innerHTML=[...t].map(c=>`<span class="ch"><span class="ci">${c}</span></span>`).join('');
+    w.innerHTML=[...t].map(c=>`<span class="ci">${c}</span>`).join('');
     root.appendChild(w);return w});
   root.setAttribute('aria-label',root.dataset.words.replaceAll('|',' '));
   const bar=document.createElement('span');bar.className='prog';bar.innerHTML='<i></i>';root.appendChild(bar);
   const ease='cubic-bezier(.2,.8,.2,1)';
   const letters=w=>[...w.querySelectorAll('.ci')];
+  const OUT=380,OUT_STAGGER=14,IN=750,IN_STAGGER=34;
   const show=(w,delay=0)=>{w.classList.add('on');letters(w).forEach((c,i)=>c.animate(
-    reduce?[{opacity:0},{opacity:1}]:[{transform:'translateY(105%) rotate(6deg)',filter:'blur(10px)',opacity:0},{transform:'none',filter:'blur(0)',opacity:1}],
-    {duration:reduce?300:800,delay:delay+i*32,easing:ease,fill:'both'}))};
+    reduce?[{opacity:0},{opacity:1}]:[{transform:'translateY(.45em) scale(.92)',filter:'blur(12px)',opacity:0},{transform:'none',filter:'blur(0)',opacity:1}],
+    {duration:reduce?300:IN,delay:delay+i*IN_STAGGER,easing:ease,fill:'both'}))};
   const hide=w=>{const ls=letters(w);ls.forEach((c,i)=>c.animate(
-    reduce?[{opacity:1},{opacity:0}]:[{transform:'none',filter:'blur(0)',opacity:1},{transform:'translateY(-105%) rotate(-4deg)',filter:'blur(8px)',opacity:0}],
-    {duration:reduce?300:500,delay:i*18,easing:'cubic-bezier(.6,0,.8,.2)',fill:'both'}));
-    setTimeout(()=>w.classList.remove('on'),500+ls.length*18)};
+    reduce?[{opacity:1},{opacity:0}]:[{transform:'none',filter:'blur(0)',opacity:1},{transform:'translateY(-.35em)',filter:'blur(8px)',opacity:0}],
+    {duration:reduce?300:OUT,delay:i*OUT_STAGGER,easing:'cubic-bezier(.5,0,.75,0)',fill:'both'}));
+    const done=OUT+ls.length*OUT_STAGGER;setTimeout(()=>w.classList.remove('on'),done);return done};
   const tick=()=>bar.firstChild.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:HOLD,easing:'linear',fill:'both'});
   let i=0;show(words[0],200);setTimeout(tick,200);
-  setInterval(()=>{hide(words[i]);i=(i+1)%words.length;show(words[i],260);setTimeout(tick,260)},HOLD+400);
+  const cycle=()=>{const d=hide(words[i]);i=(i+1)%words.length;show(words[i],d);setTimeout(tick,d);setTimeout(cycle,d+HOLD)};
+  setTimeout(cycle,200+HOLD);
 })();
 
 // Marquees
