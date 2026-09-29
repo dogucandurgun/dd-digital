@@ -47,8 +47,8 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
 @keyframes pulse{50%{opacity:.3}}
 .hero h1{font-size:clamp(56px,10vw,150px);margin:28px 0 24px}
-.rotator{display:inline-block;height:1em;overflow:hidden;vertical-align:bottom}
-.rotator span{display:block;animation:rot 10s infinite}
+.rotator{display:inline-block;height:1.15em;line-height:1.15em;overflow:hidden;vertical-align:bottom;max-width:100%}
+.rotator span{display:block;height:1.15em;animation:rot 10s infinite;white-space:nowrap}
 @keyframes rot{0%,20%{transform:translateY(0)}25%,45%{transform:translateY(-100%)}50%,70%{transform:translateY(-200%)}75%,95%{transform:translateY(-300%)}100%{transform:translateY(0)}}
 .hero p.lead{max-width:560px;font-size:18px;color:var(--muted)}
 .hero-cta{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
