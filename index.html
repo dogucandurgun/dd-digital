@@ -47,9 +47,10 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
 @keyframes pulse{50%{opacity:.3}}
 .hero h1{font-size:clamp(56px,10vw,150px);margin:28px 0 24px}
-.rotator{display:inline-block;height:1.15em;line-height:1.15em;overflow:hidden;vertical-align:bottom;max-width:100%}
-.rotator span{display:block;height:1.15em;animation:rot 10s infinite;white-space:nowrap}
-@keyframes rot{0%,20%{transform:translateY(0)}25%,45%{transform:translateY(-100%)}50%,70%{transform:translateY(-200%)}75%,95%{transform:translateY(-300%)}100%{transform:translateY(0)}}
+.rotator{display:grid;font-size:min(1em,8.6vw);line-height:1.2;padding-bottom:.05em}
+.rotator span{grid-area:1/1;white-space:nowrap;opacity:0;transform:translateY(.25em);transition:opacity .5s,transform .5s}
+.rotator span.on{opacity:1;transform:none}
+.rotator span.out{opacity:0;transform:translateY(-.25em)}
 .hero p.lead{max-width:560px;font-size:18px;color:var(--muted)}
 .hero-cta{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
 .hero-tabs{display:grid;grid-template-columns:repeat(3,1fr);margin-top:70px;border-top:1px solid var(--line)}
@@ -255,7 +256,7 @@ footer{border-top:1px solid var(--line);padding:70px 0 40px}
   <div class="wrap">
     <span class="pill mono"><i></i>Dijital dönüşüm stüdyosu</span>
     <h1>Veriyi <span class="it">değere</span><br>
-      <span class="rotator accent"><span>dönüştürüyoruz</span><span>otomatikleştiriyoruz</span><span>görselleştiriyoruz</span><span>büyütüyoruz</span></span><span class="accent">.</span>
+      <span class="rotator accent" id="rot"><span class="on">dönüştürüyoruz.</span><span>otomatikleştiriyoruz.</span><span>görselleştiriyoruz.</span><span>büyütüyoruz.</span></span>
     </h1>
     <p class="lead">DD Digital; markalar, kurumlar ve KOBİ'ler için yapay zekâ çözümleri, veri altyapısı, web platformları ve performans pazarlamasını tek çatı altında tasarlar.</p>
     <div class="hero-cta">
@@ -498,6 +499,10 @@ footer{border-top:1px solid var(--line);padding:70px 0 40px}
 
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
+
+// Hero word rotator: one word visible at a time
+(()=>{const w=[...document.querySelectorAll('#rot span')];let i=0;
+  setInterval(()=>{const a=w[i];a.classList.remove('on');a.classList.add('out');setTimeout(()=>a.classList.remove('out'),500);i=(i+1)%w.length;w[i].classList.add('on')},2600)})();
 
 // Marquees
 const fill=(id,words)=>{const h=words.map(w=>`<span>${w}</span><span class="s">✦</span>`).join('');document.getElementById(id).innerHTML=h+h+h+h};
