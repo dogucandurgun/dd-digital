@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD Digital | Yapay Zekâ, Veri ve Web Ajansı</title>
+<meta name="description" content="DD Digital: yapay zekâ çözümleri, veri mühendisliği, web tasarım ve performans pazarlaması.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0b0a; --bg2:#111311; --card:#151815; --line:#242824;
+  --text:#eef2ea; --muted:#8d968a; --accent:#c6ff3d; --accent2:#7cf0c8; --danger:#ff6b5b;
+  --display:'Anton',Impact,sans-serif; --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.accent{color:var(--accent)}
+.it{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;color:var(--accent)}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.01em}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(10,11,10,.75);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--accent);color:#0a0b0a;display:grid;place-items:center;font-family:var(--display);font-size:17px}
+.nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:14px;border:1px solid var(--line);transition:.2s;cursor:pointer;background:none;color:var(--text);font-family:var(--sans)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);color:#0a0b0a;border-color:var(--accent)}
+.btn-primary:hover{background:transparent}
+.burger{display:none;background:none;border:0;color:var(--text);font-size:24px;cursor:pointer}
+
+/* HERO */
+.hero{position:relative;padding:170px 0 90px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%);opacity:.5}
+.hero::after{content:"";position:absolute;width:700px;height:700px;right:-200px;top:-150px;background:radial-gradient(circle,rgba(198,255,61,.14),transparent 60%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid rgba(198,255,61,.35);border-radius:999px;color:var(--accent)}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.hero h1{font-size:clamp(56px,10vw,150px);margin:28px 0 24px}
+.rotator{display:inline-block;height:1em;overflow:hidden;vertical-align:bottom}
+.rotator span{display:block;animation:rot 10s infinite}
+@keyframes rot{0%,20%{transform:translateY(0)}25%,45%{transform:translateY(-100%)}50%,70%{transform:translateY(-200%)}75%,95%{transform:translateY(-300%)}100%{transform:translateY(0)}}
+.hero p.lead{max-width:560px;font-size:18px;color:var(--muted)}
+.hero-cta{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+.hero-tabs{display:grid;grid-template-columns:repeat(3,1fr);margin-top:70px;border-top:1px solid var(--line)}
+.hero-tabs div{padding:20px 0;font-size:14px;color:var(--muted);border-right:1px solid var(--line);padding-left:20px}
+.hero-tabs div:first-child{padding-left:0}
+.hero-tabs div:last-child{border:0}
+.hero-tabs b{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:20px;margin-right:10px;font-weight:400}
+
+/* MARQUEE */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:22px 0;background:var(--bg2)}
+.marquee.alt{background:var(--accent);color:#0a0b0a;transform:rotate(-1.2deg);margin:-8px -20px 0;border:0}
+.track{display:flex;gap:40px;width:max-content;animation:scroll 32s linear infinite;font-family:var(--display);font-size:34px;text-transform:uppercase;white-space:nowrap}
+.marquee.alt .track{animation-direction:reverse}
+.track span.s{color:var(--accent)}
+.marquee.alt .track span.s{color:#0a0b0a}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:120px 0}
+.sec-head{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:end;margin-bottom:60px}
+.sec-head h2{font-size:clamp(44px,6vw,86px);margin-top:14px}
+.sec-head p{color:var(--muted);font-size:17px}
+.label{color:var(--accent)}
+
+/* CAPABILITIES */
+.cap{display:grid;grid-template-columns:340px 1fr;gap:30px}
+.cap-list button{display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:26px 22px;background:none;border:1px solid var(--line);border-radius:16px;color:var(--muted);font-family:var(--display);font-size:24px;text-transform:uppercase;margin-bottom:12px;cursor:pointer;transition:.2s}
+.cap-list button small{font-family:var(--mono);font-size:12px}
+.cap-list button.on{color:var(--text);border-color:var(--accent);background:rgba(198,255,61,.05)}
+.cap-panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:40px;min-height:420px;display:none;grid-template-columns:1fr 1fr;gap:40px}
+.cap-panel.on{display:grid;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.cap-panel h3{font-size:38px;margin-bottom:16px}
+.cap-panel p{color:var(--muted);margin-bottom:22px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{font-size:13px;padding:7px 13px;border:1px solid var(--line);border-radius:999px}
+.viz{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.viz .row{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:6px}
+.big{font-family:var(--display);font-size:54px;color:var(--accent)}
+.live{display:flex;align-items:center;gap:8px;color:var(--muted);margin-top:auto}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.4s infinite}
+.flow{display:flex;flex-direction:column;gap:10px}
+.flow div{padding:14px;border:1px dashed var(--line);border-radius:10px;text-align:center;font-size:14px}
+.flow div.hl{border:1px solid var(--accent);color:var(--accent)}
+.flow em{text-align:center;color:var(--muted);font-style:normal}
+
+/* PROBLEMS */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.grid4 article{background:var(--bg);padding:34px 28px;display:flex;flex-direction:column;gap:16px;transition:.25s}
+.grid4 article:hover{background:var(--card)}
+.grid4 .n{font-family:var(--serif);font-style:italic;font-size:38px;color:var(--accent)}
+.grid4 h3{font-size:26px}
+.grid4 p{color:var(--muted);font-size:15px;flex:1}
+.grid4 .fix{font-size:14px;padding-top:16px;border-top:1px solid var(--line)}
+.grid4 .fix::before{content:"→ ";color:var(--accent)}
+
+/* DEMO */
+.demo{display:grid;grid-template-columns:1fr 1.1fr;gap:28px}
+.fb{display:flex;flex-direction:column;gap:12px}
+.fb button{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;color:var(--text);cursor:pointer;font-family:var(--sans);font-size:15px;transition:.2s}
+.fb button:hover{border-color:#3a4038}
+.fb button.on{border-color:var(--accent)}
+.fb .src{display:flex;justify-content:space-between;margin-bottom:8px;color:var(--muted)}
+.stars{color:var(--accent);letter-spacing:2px}
+.ai{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;display:flex;flex-direction:column;gap:20px}
+.ai-head{display:flex;justify-content:space-between;align-items:center}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ai-grid>div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px}
+.ai-grid .mono{color:var(--muted);font-size:11px;display:block;margin-bottom:8px}
+.ai-grid strong{font-size:17px}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;margin:2px 4px 0 0;background:var(--line)}
+.neg{color:var(--danger)}.pos{color:var(--accent)}.mid{color:#ffc857}
+.summary{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px;min-height:96px}
+.cursor::after{content:"▋";color:var(--accent);animation:pulse 1s infinite}
+.ai-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* HEATMAP */
+.heat-wrap{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;display:grid;grid-template-columns:1fr 280px;gap:30px}
+.heat-top{display:flex;gap:8px;margin-bottom:22px}
+.heat-top button{padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-family:var(--sans);font-size:13px}
+.heat-top button.on{background:var(--accent);color:#0a0b0a;border-color:var(--accent)}
+table.heat{width:100%;border-collapse:separate;border-spacing:6px}
+.heat th{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.1em;text-align:left}
+.heat td{height:52px;border-radius:10px;text-align:center;font-weight:600;cursor:pointer;transition:transform .15s;color:#0a0b0a}
+.heat td:hover{transform:scale(1.06);outline:2px solid var(--text)}
+.heat td.rl{color:var(--text);text-align:left;font-weight:500;cursor:default;background:none!important;outline:none!important;transform:none!important}
+.heat-info{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.heat-info .big{font-size:72px}
+.legend{display:flex;align-items:center;gap:10px;margin-top:18px;color:var(--muted);font-size:13px}
+.legend i{flex:0 0 160px;height:8px;border-radius:6px;background:linear-gradient(90deg,#ff6b5b,#ffc857,#c6ff3d)}
+
+/* SERVICES */
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.svc article{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:32px;display:flex;flex-direction:column;gap:14px;transition:.25s;position:relative;overflow:hidden}
+.svc article:hover{border-color:var(--accent);transform:translateY(-4px)}
+.svc article:nth-child(4),.svc article:nth-child(5){grid-column:span 1}
+.svc .ico{width:48px;height:48px;border-radius:12px;background:rgba(198,255,61,.1);color:var(--accent);display:grid;place-items:center;font-size:22px}
+.svc h3{font-size:30px}
+.svc p{color:var(--muted);font-size:15px;flex:1}
+.svc .cta-card{background:var(--accent);color:#0a0b0a;border-color:var(--accent)}
+.svc .cta-card p{color:#0a0b0a;opacity:.75}
+.svc .cta-card .btn{border-color:#0a0b0a;color:#0a0b0a;align-self:flex-start}
+
+/* PROCESS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s}
+.steps article{border-top:2px solid var(--line);padding-top:26px;position:relative}
+.steps article::before{content:"";position:absolute;top:-2px;left:0;width:0;height:2px;background:var(--accent);transition:width 1s}
+.steps article.seen::before{width:100%}
+.steps .n{font-family:var(--mono);color:var(--accent)}
+.steps h3{font-size:34px;margin:10px 0}
+.steps p{color:var(--muted);font-size:15px;margin-bottom:14px}
+.steps ul{list-style:none;font-size:14px}
+.steps li{padding:6px 0;border-bottom:1px solid var(--line)}
+.steps li::before{content:"✦ ";color:var(--accent);font-size:11px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:22px;margin-top:80px}
+.stats div{padding:40px;border-right:1px solid var(--line)}
+.stats div:last-child{border:0}
+.stats b{font-family:var(--display);font-size:88px;font-weight:400;color:var(--accent);line-height:1}
+.stats p{color:var(--muted)}
+
+/* ABOUT */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.about p{color:var(--muted);margin-bottom:18px;font-size:16px}
+.about h2{font-size:clamp(44px,5.5vw,76px)}
+
+/* CONTACT */
+.contact{display:grid;grid-template-columns:1fr 1.1fr;gap:50px}
+.contact h2{font-size:clamp(44px,6vw,84px);margin:14px 0 30px}
+.meta{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.meta div{background:var(--bg);padding:18px 22px;display:flex;justify-content:space-between}
+.meta span{color:var(--muted)}
+form{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px;display:grid;gap:16px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:grid;gap:8px;font-size:13px;color:var(--muted)}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--text);font-family:var(--sans);font-size:15px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+textarea{min-height:120px;resize:vertical}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{display:inline-flex;cursor:pointer}
+.opts input{display:none}
+.opts span{padding:9px 14px;border:1px solid var(--line);border-radius:999px;color:var(--text);font-size:13px}
+.opts input:checked+span{background:var(--accent);color:#0a0b0a;border-color:var(--accent)}
+.ok{display:none;padding:14px;border-radius:12px;background:rgba(198,255,61,.1);color:var(--accent)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:70px 0 40px}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.foot h4{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--muted);margin-bottom:16px;font-weight:400}
+.foot a{display:block;padding:4px 0;font-size:14px}
+.foot a:hover{color:var(--accent)}
+.huge{font-family:var(--display);font-size:clamp(80px,18vw,260px);line-height:.85;text-transform:uppercase;margin-top:60px;color:transparent;-webkit-text-stroke:1px #2c312b;text-align:center;user-select:none}
+.copy{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:30px;flex-wrap:wrap;gap:10px}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.seen{opacity:1;transform:none}
+
+@media(max-width:980px){
+  .nav-links,.nav .btn-primary{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:68px;left:0;right:0;background:var(--bg);padding:24px;border-bottom:1px solid var(--line)}
+  .burger{display:block}
+  .sec-head,.cap,.cap-panel.on,.demo,.heat-wrap,.about,.contact{grid-template-columns:1fr}
+  .grid4,.steps{grid-template-columns:1fr 1fr}
+  .svc{grid-template-columns:1fr 1fr}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .wrap{padding:0 16px}
+  section{padding:80px 0}
+  .hero{padding:130px 0 60px}
+  .hero-tabs,.grid4,.steps,.svc,.stats,.f2,.ai-grid{grid-template-columns:1fr}
+  .hero-tabs div{border-right:0;border-bottom:1px solid var(--line);padding-left:0}
+  .stats div{border-right:0;border-bottom:1px solid var(--line)}
+  .cap-panel{padding:24px}
+  .heat-wrap{padding:16px;overflow-x:auto}
+  .track{font-size:24px}
+  .foot{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo"><span class="logo-mark">DD</span>DD Digital</a>
+    <div class="nav-links" id="links">
+      <a href="#yetkinlik">Yetkinlikler</a>
+      <a href="#demo">Canlı Demo</a>
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#surec">Süreç</a>
+      <a href="#hakkimizda">Hakkımızda</a>
+      <a href="#iletisim">İletişim</a>
+    </div>
+    <a href="#iletisim" class="btn btn-primary">Proje Başlat ↗</a>
+    <button class="burger" aria-label="Menü" onclick="document.getElementById('links').classList.toggle('open')">☰</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="pill mono"><i></i>Dijital dönüşüm stüdyosu</span>
+    <h1>Veriyi <span class="it">değere</span><br>
+      <span class="rotator accent"><span>dönüştürüyoruz</span><span>otomatikleştiriyoruz</span><span>görselleştiriyoruz</span><span>büyütüyoruz</span></span><span class="accent">.</span>
+    </h1>
+    <p class="lead">DD Digital; markalar, kurumlar ve KOBİ'ler için yapay zekâ çözümleri, veri altyapısı, web platformları ve performans pazarlamasını tek çatı altında tasarlar.</p>
+    <div class="hero-cta">
+      <a href="#iletisim" class="btn btn-primary">Ücretsiz keşif görüşmesi →</a>
+      <a href="#demo" class="btn">Canlı demoyu dene</a>
+    </div>
+    <div class="hero-tabs">
+      <div><b>01</b>Akıllı Otomasyon</div>
+      <div><b>02</b>Veri & Analitik</div>
+      <div><b>03</b>Web & Büyüme</div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee"><div class="track" id="m1"></div></div>
+<div class="marquee alt"><div class="track" id="m2"></div></div>
+
+<section id="yetkinlik">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="mono label">Yetkinlikler</span><h2>Fikirden <span class="it">ölçülebilir</span> sonuca.</h2></div>
+      <p>Her alan tek başına güçlü; birlikte çalıştıklarında ise işinizin tamamını gören tek bir sistem oluşturuyor. Bir alan seçin.</p>
+    </div>
+    <div class="cap reveal">
+      <div class="cap-list">
+        <button class="on" data-p="0"><small>01</small>Akıllı Otomasyon</button>
+        <button data-p="1"><small>02</small>Veri & Analitik</button>
+        <button data-p="2"><small>03</small>Web & Büyüme</button>
+      </div>
+      <div>
+        <div class="cap-panel on">
+          <div>
+            <h3>Tekrarlayan işi <span class="it">makineye</span> bırakın.</h3>
+            <p>Şirket içi dokümanlarınızla konuşan asistanlar, e‑posta ve talepleri otomatik sınıflandıran akışlar ve ekibinize saat kazandıran yapay zekâ ajanları kuruyoruz.</p>
+            <div class="tags"><span>LLM asistanları</span><span>Doküman arama (RAG)</span><span>İş akışı otomasyonu</span><span>Chatbot</span></div>
+          </div>
+          <div class="viz">
+            <span class="mono" style="color:var(--muted)">Otomasyon paneli · örnek</span>
+            <div class="row"><span>Otomatik yanıtlanan talep</span><b>%72</b></div><div class="bar"><i style="width:72%"></i></div>
+            <div class="row"><span>Doğru sınıflandırma</span><b>%95</b></div><div class="bar"><i style="width:95%"></i></div>
+            <div class="row"><span>Ortalama yanıt süresi</span><b>0,8 sn</b></div><div class="bar"><i style="width:88%"></i></div>
+            <div><span class="big">46 saat</span><br><span style="color:var(--muted);font-size:14px">haftalık kazanılan ekip zamanı</span></div>
+            <div class="live mono"><i></i>Canlı · temsili veri</div>
+          </div>
+        </div>
+        <div class="cap-panel">
+          <div>
+            <h3>Dağınık veriyi <span class="it">tek ekrana</span> toplayın.</h3>
+            <p>ERP, CRM, e‑ticaret ve reklam verilerinizi güvenli bir veri ambarında birleştirip yöneticilerin her sabah baktığı panellere dönüştürüyoruz.</p>
+            <div class="tags"><span>ETL / ELT</span><span>BigQuery</span><span>Looker Studio</span><span>Power BI</span></div>
+          </div>
+          <div class="viz">
+            <span class="mono" style="color:var(--muted)">Veri akışı · örnek</span>
+            <div class="flow">
+              <div>ERP · CRM · E‑ticaret · Reklam</div><em>↓</em>
+              <div class="hl">Temizleme & birleştirme</div><em>↓</em>
+              <div>Veri ambarı</div><em>↓</em>
+              <div class="hl">Yönetici panelleri & tahmin modelleri</div>
+            </div>
+          </div>
+        </div>
+        <div class="cap-panel">
+          <div>
+            <h3>Ziyaretçiyi <span class="it">müşteriye</span> çevirin.</h3>
+            <p>Hızlı, mobil öncelikli web siteleri; arkasında teknik SEO ve ölçümlenen Google & Meta reklamlarıyla sürdürülebilir büyüme.</p>
+            <div class="tags"><span>UI / UX</span><span>Next.js</span><span>WordPress</span><span>SEO</span><span>Google Ads</span></div>
+          </div>
+          <div class="viz">
+            <span class="mono" style="color:var(--muted)">Büyüme raporu · örnek</span>
+            <div class="row"><span>Lighthouse performans</span><b>98</b></div><div class="bar"><i style="width:98%"></i></div>
+            <div class="row"><span>Organik trafik artışı</span><b>+%180</b></div><div class="bar"><i style="width:80%"></i></div>
+            <div class="row"><span>Dönüşüm oranı</span><b>%4,6</b></div><div class="bar"><i style="width:60%"></i></div>
+            <div><span class="big">3,2×</span><br><span style="color:var(--muted);font-size:14px">reklam harcaması getirisi (ROAS)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="mono label">Tanıdık geldi mi?</span><h2>Büyümenin önündeki <span class="it">dört</span> engel.</h2></div>
+      <p>Birlikte çalıştığımız işletmelerin çoğu, bize bu sorunlardan en az biriyle geliyor.</p>
+    </div>
+    <div class="grid4 reveal">
+      <article><span class="n">01</span><h3>Excel yığınları</h3><p>Raporlar elle hazırlanıyor, her ay aynı tablolar yeniden birleştiriliyor ve rakamlar kişiden kişiye değişiyor.</p><div class="fix">Otomatik güncellenen tek veri kaynağı.</div></article>
+      <article><span class="n">02</span><h3>Görünmeyen site</h3><p>Web sitesi var ama Google'da bulunmuyor, mobilde yavaş açılıyor ve ziyaretçi form doldurmadan çıkıyor.</p><div class="fix">Hız, SEO ve dönüşüm odaklı yeniden tasarım.</div></article>
+      <article><span class="n">03</span><h3>Kör reklam bütçesi</h3><p>Reklama para harcanıyor ama hangi kampanyanın satış getirdiği bilinmiyor.</p><div class="fix">Uçtan uca dönüşüm takibi ve şeffaf rapor.</div></article>
+      <article><span class="n">04</span><h3>Yarım kalan YZ</h3><p>Yapay zekâ denemesi yapıldı, demo güzeldi ama gerçek iş akışına hiç entegre edilemedi.</p><div class="fix">Baştan canlı ortama göre kurgulanan çözüm.</div></article>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="mono label">Canlı demo</span><h2>Bir yorum seçin, <span class="it">gerisini</span> izleyin.</h2></div>
+      <p>Müşteri geri bildirimlerini saniyeler içinde analiz eden, önceliklendiren ve doğru ekibe yönlendiren bir sistem örneği.</p>
+    </div>
+    <div class="demo reveal">
+      <div class="fb" id="fb"></div>
+      <div class="ai">
+        <div class="ai-head"><span class="mono accent">YZ Analizi</span><span class="mono" id="status" style="color:var(--muted)">Hazır</span></div>
+        <div class="ai-grid">
+          <div><span class="mono">Duygu</span><strong id="a-s">—</strong></div>
+          <div><span class="mono">Aciliyet</span><strong id="a-u">—</strong></div>
+          <div><span class="mono">Konular</span><div id="a-t">—</div></div>
+          <div><span class="mono">Yönlendirme</span><strong id="a-r">—</strong></div>
+        </div>
+        <div class="summary"><span class="mono" style="color:var(--muted);font-size:11px">Özet & önerilen aksiyon</span><p id="a-sum" style="margin-top:8px"></p></div>
+        <div class="ai-actions"><button class="btn btn-primary" onclick="toast('Görev oluşturuldu (demo)')">Görev oluştur</button><button class="btn" onclick="nextFb()">Sonraki yorum →</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="mono label">Karar paneli</span><h2>Sorunu <span class="it">büyümeden</span> görün.</h2></div>
+      <p>Şube × kategori ısı haritası, performansın nerede düştüğünü tek bakışta gösterir. Metriği değiştirin, hücrelerin üzerine gelin.</p>
+    </div>
+    <div class="heat-wrap reveal">
+      <div>
+        <div class="heat-top"><button class="on" data-m="score">Memnuniyet</button><button data-m="delta">30 günlük değişim</button></div>
+        <table class="heat" id="heat"></table>
+        <div class="legend">Düşük <i></i> Yüksek · örnek veri</div>
+      </div>
+      <div class="heat-info">
+        <span class="mono" id="h-l" style="color:var(--muted)">Bir hücre seçin</span>
+        <span class="big" id="h-v">—</span>
+        <p id="h-d" style="color:var(--muted)">Hücrenin üzerine gelerek şube ve kategoriye ait yorumu görün.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hizmetler">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="mono label">Hizmetler</span><h2>Tek ekip, <span class="it">her</span> katman.</h2></div>
+      <p>Strateji, tasarım, yazılım ve pazarlama aynı masada; sorumluluk dağılmıyor, sonuç netleşiyor.</p>
+    </div>
+    <div class="svc">
+      <article class="reveal"><div class="ico">✦</div><h3>Yapay Zekâ</h3><p>Kendi verinizle çalışan asistanlar, otomasyonlar ve karar destek araçları.</p><div class="tags"><span>LLM</span><span>Ajanlar</span><span>RAG</span></div></article>
+      <article class="reveal"><div class="ico">◈</div><h3>Veri & BI</h3><p>Veri ambarı, otomatik raporlama ve yönetici panelleri.</p><div class="tags"><span>BigQuery</span><span>Looker</span><span>Power BI</span></div></article>
+      <article class="reveal"><div class="ico">▣</div><h3>Web Tasarım</h3><p>Kurumsal site, e‑ticaret ve özel web uygulamaları; hızlı ve mobil öncelikli.</p><div class="tags"><span>UI/UX</span><span>Next.js</span><span>WordPress</span></div></article>
+      <article class="reveal"><div class="ico">↗</div><h3>SEO & Reklam</h3><p>Teknik SEO, içerik stratejisi, Google ve Meta reklam yönetimi.</p><div class="tags"><span>Google Ads</span><span>Meta</span><span>GA4</span></div></article>
+      <article class="reveal"><div class="ico">◎</div><h3>Mobil Uygulama</h3><p>iOS ve Android için kullanıcı dostu, ölçeklenebilir uygulamalar.</p><div class="tags"><span>React Native</span><span>Flutter</span></div></article>
+      <article class="reveal cta-card"><h3>Projeniz mi var?</h3><p>30 dakikalık ücretsiz görüşmede ihtiyacınızı dinleyelim, yol haritasını birlikte çizelim.</p><a href="#iletisim" class="btn">Görüşme ayarla →</a></article>
+    </div>
+  </div>
+</section>
+
+<section id="surec" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="mono label">Nasıl çalışıyoruz</span><h2>Dört adımda <span class="it">canlıya</span>.</h2></div>
+      <p>Sürprizsiz, şeffaf ve her aşamada ölçülebilir bir süreç.</p>
+    </div>
+    <div class="steps">
+      <article class="reveal"><span class="n">01 /</span><h3>Dinle</h3><p>İşinizi, hedeflerinizi ve mevcut sistemlerinizi anlıyoruz.</p><ul><li>Keşif atölyesi</li><li>Mevcut durum analizi</li><li>Başarı kriterleri</li></ul></article>
+      <article class="reveal"><span class="n">02 /</span><h3>Kurgula</h3><p>Mimariyi ve tasarımı, üzerinde konuşulabilir bir prototiple somutlaştırıyoruz.</p><ul><li>Teknik mimari</li><li>Tıklanabilir prototip</li><li>Zaman & bütçe planı</li></ul></article>
+      <article class="reveal"><span class="n">03 /</span><h3>İnşa et</h3><p>Kısa sprintlerle geliştiriyor, her hafta ilerlemeyi gösteriyoruz.</p><ul><li>Haftalık demo</li><li>Test & kalite kontrol</li><li>Güvenli yayına alma</li></ul></article>
+      <article class="reveal"><span class="n">04 /</span><h3>Büyüt</h3><p>Yayından sonra ölçüyor, raporluyor ve sürekli iyileştiriyoruz.</p><ul><li>Canlı paneller</li><li>Aylık performans raporu</li><li>Geliştirme yol haritası</li></ul></article>
+    </div>
+    <div class="stats reveal">
+      <div><b data-c="120">0</b><b>+</b><p>Tamamlanan proje</p></div>
+      <div><b data-c="98">0</b><b>%</b><p>Müşteri memnuniyeti</p></div>
+      <div><b data-c="5">0</b><p>Uzmanlık alanı, tek çatı altında</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="hakkimizda">
+  <div class="wrap about reveal">
+    <div><span class="mono label">Hakkımızda</span><h2 style="margin-top:14px">Teknolojiyi <span class="it">sade</span> anlatan ekip.</h2></div>
+    <div>
+      <p>DD Digital, yazılım mühendisleri, veri uzmanları, tasarımcılar ve performans pazarlamacılarından oluşan bir dijital çözüm stüdyosudur. İnanıyoruz ki iyi teknoloji karmaşık görünmek zorunda değil; doğru kurgulandığında işinizi sessizce hızlandırır.</p>
+      <p>Her projeye iş hedefinden başlıyoruz: hangi rakam değişmeli, hangi süreç kısalmalı, hangi müşteri daha kolay ulaşmalı? Teknoloji seçimini bu sorulara göre yapıyor, sonucu da aynı ölçütlerle raporluyoruz.</p>
+      <p>İster yeni bir web sitesi, ister ekibinizin işini hafifletecek bir yapay zekâ asistanı olsun; fikri canlı ve ölçülebilir bir ürüne dönüştürmek için buradayız.</p>
+    </div>
+  </div>
+</section>
+
+<section id="iletisim" style="background:var(--bg2)">
+  <div class="wrap contact">
+    <div class="reveal">
+      <span class="mono label">İletişim</span>
+      <h2>Bir sonraki adımı <span class="it">birlikte</span> atalım.</h2>
+      <div class="meta">
+        <div><span>E‑posta</span><b>hello@dddigital.com</b></div>
+        <div><span>Telefon</span><b>+90 (000) 000 00 00</b></div>
+        <div><span>Konum</span><b>Türkiye</b></div>
+        <div><span>Yanıt süresi</span><b>24 saat içinde</b></div>
+      </div>
+    </div>
+    <form class="reveal" onsubmit="event.preventDefault();this.querySelector('.ok').style.display='block';this.reset()">
+      <div class="f2">
+        <label>Ad Soyad*<input required></label>
+        <label>Şirket<input></label>
+      </div>
+      <div class="f2">
+        <label>E‑posta*<input type="email" required></label>
+        <label>Telefon<input type="tel"></label>
+      </div>
+      <label>Hangi alanla ilgileniyorsunuz?
+        <div class="opts">
+          <label><input type="checkbox"><span>Yapay Zekâ</span></label>
+          <label><input type="checkbox"><span>Veri & BI</span></label>
+          <label><input type="checkbox"><span>Web Tasarım</span></label>
+          <label><input type="checkbox"><span>SEO & Reklam</span></label>
+          <label><input type="checkbox"><span>Mobil Uygulama</span></label>
+        </div>
+      </label>
+      <label>Bütçe aralığı<select><option>Seçiniz</option><option>50.000 ₺ altı</option><option>50.000 – 150.000 ₺</option><option>150.000 – 500.000 ₺</option><option>500.000 ₺ üzeri</option></select></label>
+      <label>Projenizden bahsedin<textarea placeholder="Kısaca ihtiyacınızı yazın…"></textarea></label>
+      <button class="btn btn-primary" type="submit" style="justify-content:center">Gönder →</button>
+      <div class="ok">Teşekkürler! Mesajınız alındı, en kısa sürede dönüş yapacağız.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="#" class="logo"><span class="logo-mark">DD</span>DD Digital</a><p style="color:var(--muted);margin-top:16px;max-width:320px;font-size:14px">Yapay zekâ, veri, web ve büyüme için tek iş ortağınız.</p></div>
+      <div><h4>Hizmetler</h4><a href="#hizmetler">Yapay Zekâ</a><a href="#hizmetler">Veri & BI</a><a href="#hizmetler">Web Tasarım</a><a href="#hizmetler">SEO & Reklam</a></div>
+      <div><h4>Şirket</h4><a href="#hakkimizda">Hakkımızda</a><a href="#surec">Süreç</a><a href="#demo">Demo</a><a href="#iletisim">İletişim</a></div>
+      <div><h4>Sosyal</h4><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="#">X</a><a href="#">YouTube</a></div>
+    </div>
+    <div class="huge">DD Digital</div>
+    <div class="copy"><span>© <span id="yr"></span> DD Digital. Tüm hakları saklıdır.</span><span>KVKK · Gizlilik · Çerezler</span></div>
+  </div>
+</footer>
+
+<div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--accent);color:#0a0b0a;padding:14px 22px;border-radius:999px;font-weight:600;transition:.3s;z-index:99"></div>
+
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+// Marquees
+const fill=(id,words)=>{const h=words.map(w=>`<span>${w}</span><span class="s">✦</span>`).join('');document.getElementById(id).innerHTML=h+h+h+h};
+fill('m1',['Yapay Zekâ','Veri Mühendisliği','Web Tasarım','Otomasyon','Analitik']);
+fill('m2',['SEO','Google Ads','Mobil Uygulama','E‑Ticaret','Bulut','UI / UX']);
+
+// Capabilities tabs
+const capBtns=document.querySelectorAll('.cap-list button'),panels=document.querySelectorAll('.cap-panel');
+capBtns.forEach(b=>b.onclick=()=>{capBtns.forEach(x=>x.classList.remove('on'));panels.forEach(p=>p.classList.remove('on'));b.classList.add('on');panels[b.dataset.p].classList.add('on')});
+
+// Feedback demo
+const FB=[
+ {src:'E‑TİCARET · KARGO',st:2,txt:'Siparişim bir haftadır yolda, takip numarası da hiç güncellenmiyor.',s:['Olumsuz','neg'],u:['Yüksek','neg'],t:['Kargo','Takip','Gecikme'],r:'Lojistik ekibi',sum:'Kargo firmasında takılı kalmış gönderi. Müşteriye 2 saat içinde proaktif bilgi verilmeli, kargo firmasıyla eskalasyon açılmalı.'},
+ {src:'MAĞAZA · KASA',st:5,txt:'Kasadaki çalışan çok ilgiliydi, iade işlemim iki dakikada bitti.',s:['Olumlu','pos'],u:['Düşük','pos'],t:['Personel','İade'],r:'Mağaza müdürü',sum:'Personel memnuniyeti yüksek. İlgili çalışana teşekkür iletilmeli, uygulama iyi örnek olarak diğer şubelerle paylaşılmalı.'},
+ {src:'MOBİL UYGULAMA',st:1,txt:'Güncellemeden sonra uygulama açılır açılmaz kapanıyor, ödeme yapamıyorum.',s:['Çok olumsuz','neg'],u:['Kritik','neg'],t:['Hata','Ödeme','Güncelleme'],r:'Yazılım ekibi',sum:'Son sürümde çökme hatası ödeme akışını engelliyor. Acil hotfix önceliği verilmeli, etkilenen kullanıcı sayısı izlenmeli.'},
+ {src:'MÜŞTERİ HİZMETLERİ',st:3,txt:'Sorunum çözüldü ama çağrı merkezinde yirmi dakika bekledim.',s:['Nötr','mid'],u:['Orta','mid'],t:['Bekleme süresi','Çağrı merkezi'],r:'Operasyon ekibi',sum:'Çözüm başarılı, ancak bekleme süresi memnuniyeti düşürüyor. Yoğun saatlerde geri arama seçeneği önerilir.'}
+];
+let cur=0,typer;
+const fbBox=document.getElementById('fb');
+FB.forEach((f,i)=>{const b=document.createElement('button');b.innerHTML=`<div class="src mono"><span>${f.src}</span><span class="stars">${'★'.repeat(f.st)}${'☆'.repeat(5-f.st)}</span></div>${f.txt}`;b.onclick=()=>analyze(i);fbBox.appendChild(b)});
+function analyze(i){
+  cur=i;[...fbBox.children].forEach((b,j)=>b.classList.toggle('on',j===i));
+  const f=FB[i],st=document.getElementById('status');
+  ['a-s','a-u','a-r'].forEach(id=>document.getElementById(id).textContent='…');document.getElementById('a-t').textContent='…';
+  const sum=document.getElementById('a-sum');sum.textContent='';sum.className='cursor';st.textContent='İşleniyor…';st.style.color='var(--accent)';
+  clearInterval(typer);
+  setTimeout(()=>{
+    document.getElementById('a-s').innerHTML=`<span class="${f.s[1]}">${f.s[0]}</span>`;
+    document.getElementById('a-u').innerHTML=`<span class="${f.u[1]}">${f.u[0]}</span>`;
+    document.getElementById('a-t').innerHTML=f.t.map(t=>`<span class="chip">${t}</span>`).join('');
+    document.getElementById('a-r').textContent=f.r;
+    let k=0;typer=setInterval(()=>{sum.textContent=f.sum.slice(0,++k);if(k>=f.sum.length){clearInterval(typer);sum.className='';st.textContent='Tamamlandı · örnek veri';st.style.color='var(--muted)'}},18);
+  },700);
+}
+function nextFb(){analyze((cur+1)%FB.length)}
+analyze(0);
+
+// Heatmap
+const cols=['Hız','Temizlik','Personel','Fiyat','Dijital'],rows=['İstanbul','Ankara','İzmir','Bursa','Antalya','Kocaeli'];
+const score=[[61,84,78,70,88],[75,80,83,66,72],[82,77,85,73,79],[68,74,70,59,64],[79,71,76,81,68],[57,82,74,69,86]];
+const delta=score.map(r=>r.map(v=>Math.round((v-70)/2+(Math.sin(v)*6))));
+let metric='score';
+const color=(v,m)=>{const t=m==='score'?Math.min(1,Math.max(0,(v-50)/40)):Math.min(1,Math.max(0,(v+12)/24));const h=5+t*75;return `hsl(${h} 95% ${58+t*4}%)`};
+function drawHeat(){
+  const d=metric==='score'?score:delta;
+  let h='<tr><th></th>'+cols.map(c=>`<th>${c.toUpperCase()}</th>`).join('')+'</tr>';
+  rows.forEach((r,i)=>{h+=`<tr><td class="rl">${r}</td>`+d[i].map((v,j)=>`<td data-i="${i}" data-j="${j}" style="background:${color(v,metric)}">${metric==='delta'&&v>0?'+':''}${v}</td>`).join('')+'</tr>'});
+  const t=document.getElementById('heat');t.innerHTML=h;
+  t.querySelectorAll('td[data-i]').forEach(td=>td.onmouseenter=td.onclick=()=>{
+    const i=td.dataset.i,j=td.dataset.j,v=d[i][j];
+    document.getElementById('h-l').textContent=`${rows[i]} · ${cols[j]}`.toUpperCase();
+    const vv=document.getElementById('h-v');vv.textContent=(metric==='delta'&&v>0?'+':'')+v;vv.style.color=color(v,metric);
+    const bad=metric==='score'?v<65:v<-3,good=metric==='score'?v>=80:v>=4;
+    document.getElementById('h-d').textContent=bad?'Riskli bölge: olumsuz geri bildirimler burada yoğunlaşıyor. Bu hafta aksiyon planı öneriliyor.':good?'Güçlü performans: bu şubenin uygulamaları diğerlerine örnek olabilir.':'Stabil: yakından izlemeye devam edin, küçük iyileştirmeler fark yaratabilir.';
+  });
+}
+document.querySelectorAll('.heat-top button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.heat-top button').forEach(x=>x.classList.remove('on'));b.classList.add('on');metric=b.dataset.m;drawHeat()});
+drawHeat();
+
+// Reveal + counters
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('seen');
+  e.target.querySelectorAll('[data-c]').forEach(el=>{const end=+el.dataset.c;let n=0;const step=Math.max(1,Math.ceil(end/60));const t=setInterval(()=>{n=Math.min(end,n+step);el.textContent=n;if(n>=end)clearInterval(t)},20)});
+  io.unobserve(e.target)}),{threshold:.15});
+document.querySelectorAll('.reveal,.steps article').forEach(el=>io.observe(el));
+
+document.querySelectorAll('#links a').forEach(a=>a.onclick=()=>document.getElementById('links').classList.remove('open'));
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.transform='translateX(-50%)';setTimeout(()=>t.style.transform='translateX(-50%) translateY(100px)',2200)}
+</script>
+</body>
+</html>
