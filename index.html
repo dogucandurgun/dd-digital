@@ -47,10 +47,14 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
 @keyframes pulse{50%{opacity:.3}}
 .hero h1{font-size:clamp(56px,10vw,150px);margin:28px 0 24px}
-.rotator{display:grid;font-size:min(1em,8.6vw);line-height:1.2;padding-bottom:.05em}
-.rotator span{grid-area:1/1;white-space:nowrap;opacity:0;transform:translateY(.25em);transition:opacity .5s,transform .5s}
-.rotator span.on{opacity:1;transform:none}
-.rotator span.out{opacity:0;transform:translateY(-.25em)}
+.rotator{display:inline-grid;font-size:min(1em,8.6vw);line-height:1.2;position:relative;padding-bottom:.12em}
+.rotator .w{grid-area:1/1;white-space:nowrap;visibility:hidden}
+.rotator .w.on{visibility:visible}
+.rotator .ch{display:inline-block;overflow:hidden;vertical-align:top;padding:.16em .02em .1em;margin:-.16em -.02em -.1em}
+.rotator .ci{display:inline-block;will-change:transform,filter,opacity;background:linear-gradient(180deg,#e4ff9a,var(--accent) 55%,#8fd61f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rotator .prog{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(198,255,61,.15);border-radius:3px;overflow:hidden}
+.rotator .prog i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+@media(prefers-reduced-motion:reduce){.rotator .ci{filter:none!important}}
 .hero p.lead{max-width:560px;font-size:18px;color:var(--muted)}
 .hero-cta{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
 .hero-tabs{display:grid;grid-template-columns:repeat(3,1fr);margin-top:70px;border-top:1px solid var(--line)}
@@ -256,7 +260,7 @@ footer{border-top:1px solid var(--line);padding:70px 0 40px}
   <div class="wrap">
     <span class="pill mono"><i></i>Dijital dönüşüm stüdyosu</span>
     <h1>Veriyi <span class="it">değere</span><br>
-      <span class="rotator accent" id="rot"><span class="on">dönüştürüyoruz.</span><span>otomatikleştiriyoruz.</span><span>görselleştiriyoruz.</span><span>büyütüyoruz.</span></span>
+      <span class="rotator" id="rot" data-words="dönüştürüyoruz.|otomatikleştiriyoruz.|görselleştiriyoruz.|büyütüyoruz."></span>
     </h1>
     <p class="lead">DD Digital; markalar, kurumlar ve KOBİ'ler için yapay zekâ çözümleri, veri altyapısı, web platformları ve performans pazarlamasını tek çatı altında tasarlar.</p>
     <div class="hero-cta">
@@ -500,9 +504,29 @@ footer{border-top:1px solid var(--line);padding:70px 0 40px}
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
 
-// Hero word rotator: one word visible at a time
-(()=>{const w=[...document.querySelectorAll('#rot span')];let i=0;
-  setInterval(()=>{const a=w[i];a.classList.remove('on');a.classList.add('out');setTimeout(()=>a.classList.remove('out'),500);i=(i+1)%w.length;w[i].classList.add('on')},2600)})();
+// Hero word rotator: per-letter masked reveal with blur
+(()=>{
+  const root=document.getElementById('rot'),HOLD=2800;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const words=root.dataset.words.split('|').map(t=>{
+    const w=document.createElement('span');w.className='w';w.setAttribute('aria-hidden','true');
+    w.innerHTML=[...t].map(c=>`<span class="ch"><span class="ci">${c}</span></span>`).join('');
+    root.appendChild(w);return w});
+  root.setAttribute('aria-label',root.dataset.words.replaceAll('|',' '));
+  const bar=document.createElement('span');bar.className='prog';bar.innerHTML='<i></i>';root.appendChild(bar);
+  const ease='cubic-bezier(.2,.8,.2,1)';
+  const letters=w=>[...w.querySelectorAll('.ci')];
+  const show=(w,delay=0)=>{w.classList.add('on');letters(w).forEach((c,i)=>c.animate(
+    reduce?[{opacity:0},{opacity:1}]:[{transform:'translateY(105%) rotate(6deg)',filter:'blur(10px)',opacity:0},{transform:'none',filter:'blur(0)',opacity:1}],
+    {duration:reduce?300:800,delay:delay+i*32,easing:ease,fill:'both'}))};
+  const hide=w=>{const ls=letters(w);ls.forEach((c,i)=>c.animate(
+    reduce?[{opacity:1},{opacity:0}]:[{transform:'none',filter:'blur(0)',opacity:1},{transform:'translateY(-105%) rotate(-4deg)',filter:'blur(8px)',opacity:0}],
+    {duration:reduce?300:500,delay:i*18,easing:'cubic-bezier(.6,0,.8,.2)',fill:'both'}));
+    setTimeout(()=>w.classList.remove('on'),500+ls.length*18)};
+  const tick=()=>bar.firstChild.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:HOLD,easing:'linear',fill:'both'});
+  let i=0;show(words[0],200);setTimeout(tick,200);
+  setInterval(()=>{hide(words[i]);i=(i+1)%words.length;show(words[i],260);setTimeout(tick,260)},HOLD+400);
+})();
 
 // Marquees
 const fill=(id,words)=>{const h=words.map(w=>`<span>${w}</span><span class="s">✦</span>`).join('');document.getElementById(id).innerHTML=h+h+h+h};
